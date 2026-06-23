@@ -69,6 +69,8 @@ html {
     scroll-behavior: smooth;
     scrollbar-width: thin;
     scrollbar-color: var(--accent-gold) var(--bg-base);
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 body {
@@ -76,6 +78,7 @@ body {
     color: var(--text-primary);
     font-family: var(--font-body);
     line-height: 1.6;
+    max-width: 100%;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
 }
@@ -367,13 +370,38 @@ body:not(.dark-theme) .moon-icon {
 
 .hero h1 {
     font-family: var(--font-heading);
-    font-size: clamp(2.5rem, 5vw, 4.2rem);
+    font-size: 1.5rem; /* text-2xl */
     font-weight: 500;
-    line-height: 1.15;
+    line-height: 1.2;
     letter-spacing: 1px;
     margin-bottom: 2rem;
     color: var(--text-primary);
     text-transform: uppercase;
+    text-align: center;
+}
+
+@media (min-width: 640px) {
+    .hero h1 {
+        font-size: 1.875rem; /* sm:text-3xl */
+    }
+}
+
+@media (min-width: 768px) {
+    .hero h1 {
+        font-size: 3rem; /* md:text-5xl */
+    }
+}
+
+@media (min-width: 992px) {
+    .hero h1 {
+        text-align: left;
+    }
+}
+
+@media (min-width: 1024px) {
+    .hero h1 {
+        font-size: 4.5rem; /* lg:text-7xl */
+    }
 }
 
 .hero h1 span.gold-text {
@@ -1583,20 +1611,26 @@ body.dark-theme .custom-cursor-ring.hover {
     
     .nav-links {
         position: fixed;
-        top: 0;
-        right: -100%;
+        top: 70px; /* immediately below mobile navbar */
+        left: 0;
         width: 100%;
-        height: 100vh;
+        height: auto;
+        max-height: 0; /* collapsed by default */
+        overflow: hidden;
         background: rgba(253, 251, 247, 0.98); /* Luxury Ivory Glassmorphism */
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
-        border-left: 1px solid var(--accent-gold-light);
+        border-bottom: 1px solid var(--accent-gold);
+        border-left: none;
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 2.5rem;
-        transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        justify-content: flex-start;
+        align-items: stretch;
+        gap: 0;
+        transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, padding 0.3s ease-in-out !important;
         z-index: 1050;
+        opacity: 0;
+        pointer-events: none;
+        padding: 0;
     }
     
     body.dark-theme .nav-links {
@@ -1604,29 +1638,44 @@ body.dark-theme .custom-cursor-ring.hover {
     }
     
     .nav-links.active {
-        right: 0;
+        max-height: 450px; /* expand to fit content */
+        opacity: 1;
+        pointer-events: auto;
+        padding: 1.5rem 0;
+    }
+
+    .nav-links li {
+        width: 100%;
+        text-align: center;
     }
     
     .nav-links a {
-        font-size: 1.5rem; /* Large touch targets */
+        display: block;
+        padding: 0.85rem 0;
+        font-size: 1.15rem; /* Large touch targets */
         font-family: var(--font-heading);
         color: var(--text-primary);
         letter-spacing: 2px;
+        width: 100%;
     }
     
     .mobile-only-cta {
         display: block !important;
+        padding: 0.85rem 1.5rem;
+        text-align: center;
+        width: 100%;
     }
     
     .nav-cta-mobile {
-        display: inline-block;
-        padding: 1rem 3rem;
+        display: block;
+        width: 100%;
+        padding: 0.75rem 0;
         border: 1px solid var(--accent-gold);
         background: transparent;
         color: var(--accent-gold);
         font-family: var(--font-body);
         font-weight: 600;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         text-transform: uppercase;
         letter-spacing: 2px;
         text-decoration: none;
@@ -1657,8 +1706,6 @@ body.dark-theme .custom-cursor-ring.hover {
         max-width: 320px;
         width: 100%;
         margin: 0 auto;
-    }
-    
     }
     
     .gallery-grid {
@@ -1735,7 +1782,8 @@ body.dark-theme .custom-cursor-ring.hover {
 /* Very Small Mobile Devices (max-width: 480px) */
 @media (max-width: 480px) {
     .hero-main-card {
-        max-width: 100%;
+        max-width: calc(100% - 15px); /* Offset the box shadow */
+        margin-right: 15px; /* Leave space for shadow */
         box-shadow: 8px 8px 0px var(--accent-gold-light);
     }
     
